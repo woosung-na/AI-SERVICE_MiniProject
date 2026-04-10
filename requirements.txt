@@ -1,0 +1,35 @@
+# Core LLM & Agent Framework
+# 버전 범위를 넓혀 pip가 최적의 조합을 찾게 하되, v0.3 계열은 유지합니다.
+langchain>=0.3.0,<0.4.0
+langchain-core>=0.3.29,<0.4.0
+langchain-openai>=0.2.0,<0.4.0
+langchain-community>=0.3.0,<0.4.0
+langgraph>=0.2.0
+
+# Retrieval
+faiss-cpu>=1.8.0
+rank-bm25>=0.2.2
+langchain-classic>=0.1.0
+
+# Document Loading
+pdfplumber>=0.11.0
+pypdf>=4.0.0
+pymupdf>=1.24.0
+
+# Web Search
+tavily-python>=0.3.0
+
+# Data & Validation
+pydantic>=2.0.0
+python-dotenv>=1.0.0
+
+# Performance & Evaluation
+pandas>=2.0.0
+numpy>=1.26.0,<2.0.0
+matplotlib>=3.8.0
+tqdm>=4.66.0
+
+# Optional: PDF Report Generation & NLP
+reportlab>=4.1.0
+markdown>=3.6.0
+kiwipiepy>=0.18.0
