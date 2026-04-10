@@ -41,9 +41,7 @@ HBM4, PIM(Processing-in-Memory), CXL(Compute Express Link) 분야에서 Samsung�
 
 ## Architecture
 
-```
 ![alt text](image.png)
-```
 
 ## Directory Structure
 
