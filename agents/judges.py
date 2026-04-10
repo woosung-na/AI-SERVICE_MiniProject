@@ -149,10 +149,14 @@ def trl_judge_node(state: ResearchState, metrics: MetricsTracker = None) -> Rese
             "elapsed_sec": round(elapsed, 3),
         })
 
+    # TRL 실패 시 iteration_count 증가 → MAX_ITERATIONS 도달 시 Supervisor가 draft로 fallback
+    new_iteration = state.get("iteration_count", 0) + (0 if passed else 1)
+
     return {
         **state,
         "trl_passed": passed,
         "feedback": feedback,
+        "iteration_count": new_iteration,
     }
 
 
