@@ -299,11 +299,17 @@ def main():
     elif args.pdf:
         from rag.pdf import PDFRetrievalChain
         chain = PDFRetrievalChain(source_uri=args.pdf, bm25_weight=args.alpha, dense_weight=1-args.alpha)
-        chain.create_chain()
 
-        # 청크에 chunk_id 부여
-        for i, doc in enumerate(chain._split_docs):
+        # chunk_id를 인덱싱 전에 부여해야 FAISS·BM25 반환 문서에도 metadata가 살아있음
+        docs_raw = chain.load_documents(chain.source_uri)
+        splitter = chain.create_text_splitter()
+        split_docs = chain.split_documents(docs_raw, splitter)
+        for i, doc in enumerate(split_docs):
             doc.metadata["chunk_id"] = i
+
+        vectorstore = chain.create_vectorstore(split_docs)
+        chain.retriever = chain.create_ensemble_retriever(split_docs, vectorstore)
+        chain._split_docs = split_docs
 
         testset = generate_testset_with_llm(chain._split_docs, n_samples=args.n_samples)
         logger.info(f"테스트셋 생성 완료: {len(testset)}개")

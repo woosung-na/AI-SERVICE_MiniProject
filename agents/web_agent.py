@@ -64,10 +64,14 @@ def _build_queries(base_query: str) -> list[str]:
 
 
 def _search_parallel(queries: list[str]) -> list[dict]:
-    """Tavily 병렬 검색"""
+    """Tavily 병렬 검색.
+
+    LangChain TavilySearchResults 툴 대신 tavily-python 클라이언트를 직접 사용.
+    LangChain 콜백 시스템을 완전히 우회하므로 LangSmith에 추적되지 않음.
+    """
     try:
-        from langchain_community.tools.tavily_search import TavilySearchResults
-        tavily = TavilySearchResults(max_results=3)
+        from tavily import TavilyClient
+        client = TavilyClient(api_key=os.environ["TAVILY_API_KEY"])
     except Exception as e:
         logger.error(f"[Web Agent] Tavily 초기화 실패: {e}")
         return []
@@ -75,7 +79,7 @@ def _search_parallel(queries: list[str]) -> list[dict]:
     results = []
     with ThreadPoolExecutor(max_workers=4) as executor:
         future_to_query = {
-            executor.submit(_single_search, tavily, q): q
+            executor.submit(_single_search, client, q): q
             for q in queries
         }
         for future in as_completed(future_to_query):
@@ -98,6 +102,12 @@ def _search_parallel(queries: list[str]) -> list[dict]:
     return deduped
 
 
-def _single_search(tavily, query: str) -> list[dict]:
-    raw = tavily.invoke(query)
-    return raw if isinstance(raw, list) else []
+def _single_search(client, query: str) -> list[dict]:
+    """tavily-python 클라이언트 직접 호출 → LangSmith 추적 없음"""
+    resp = client.search(query=query, max_results=3)
+    results = resp.get("results", [])
+    # LangChain 툴과 동일한 형식으로 정규화: {title, url, content}
+    return [
+        {"title": r.get("title", ""), "url": r.get("url", ""), "content": r.get("content", "")}
+        for r in results
+    ]

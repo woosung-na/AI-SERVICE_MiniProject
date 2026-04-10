@@ -29,9 +29,9 @@ class RetrievalChain(ABC):
         self.embeddings = "text-embedding-3-small"
         self.cache_dir = Path(".cache/embeddings")
         self.index_dir = Path(".cache/faiss_index")
-        # BM25 vs Dense 가중치 (α=0.5 기본값, eval/로 최적화)
-        self.bm25_weight = 0.5
-        self.dense_weight = 0.5
+        # BM25 vs Dense 가중치 (eval/ 튜닝 결과: α=0.3이 MRR·Hit Rate 전 지표 통과)
+        self.bm25_weight = 0.3
+        self.dense_weight = 0.7
 
     @abstractmethod
     def load_documents(self, source_uris):

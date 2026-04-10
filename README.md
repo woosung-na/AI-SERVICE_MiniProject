@@ -72,6 +72,21 @@ AI-SERVICE/
 └── requirements.txt
 ```
 
+## Retrieval Evaluation
+
+LLM이 자동 생성한 20개 질문으로 FAISS + BM25 앙상블 리트리버 성능을 측정한 결과 (α=0.3, 12 PDFs, 2026-04-10)
+
+| 지표 | 결과 | 기준 | 판정 |
+|------|------|------|------|
+| Hit Rate@3 | 0.60 | ≥ 0.60 | ✅ |
+| Hit Rate@5 | 0.80 | ≥ 0.70 | ✅ |
+| MRR | 0.573 | ≥ 0.50 | ✅ |
+| Objectivity Score | 85.7% | ≥ 50% | ✅ |
+
+> **α=0.3 채택 근거**: BM25(30%) + Dense(70%) 조합이 전 지표 통과. 반도체 기술 도메인 특성상 문맥·의미 기반 Dense 검색의 비중이 높을수록 MRR이 향상됨.
+>
+> **Objectivity Score**: 7개 표준 분석 쿼리 중 6개(85.7%)에서 리스크·반론 문서가 검색 결과에 포함됨 — 확증 편향 방지 메커니즘 유효.
+
 ## Contributors
 
 - **나우성** : 전체 시스템 설계 및 단독 개발 — Agent 설계, Supervisor 패턴 구현, 확증 편향 방지 전략 (비판적 데이터 주입/교차 검증 아키텍처/데이터 편향 통제), Retrieval 앙상블 구성, Prompt Engineering, PDF 렌더링
