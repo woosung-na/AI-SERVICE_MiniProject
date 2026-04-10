@@ -74,4 +74,4 @@ AI-SERVICE/
 
 ## Contributors
 
-- **나우성** : 전체 시스템 설계 및 단독 개발 — Agent 설계, Supervisor 패턴 구현, 확증 편향 방지 전략, Retrieval 앙상블 구성, Prompt Engineering, PDF 렌더링
+- **나우성** : 전체 시스템 설계 및 단독 개발 — Agent 설계, Supervisor 패턴 구현, 확증 편향 방지 전략 (비판적 데이터 주입/교차 검증 아키텍처/데이터 편향 통제), Retrieval 앙상블 구성, Prompt Engineering, PDF 렌더링
